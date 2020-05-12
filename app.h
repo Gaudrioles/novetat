@@ -17,11 +17,11 @@
     3 - zip
     4 - notepad++
     5 - gimp
-	6 - libreoffice
-	7 - FileZilla
-	8 - OpenShot
-	9 - InnoSetup
-   10 - Git
+    6 - libreoffice
+    7 - FileZilla
+    8 - OpenShot
+    9 - InnoSetup
+    10 - Git
 */
 
 typedef struct
@@ -57,8 +57,6 @@ typedef struct
     GtkWidget* bouton_item_install[nombre_element];
 
     GtkWidget* progress_bar_item[nombre_element];
-
-    gdouble progression;
 }app;
 
 static char tableau_id[nombre_element][TAILLE_MAX] = {"Novetat","Update","VLC","7zip", "Notepad++", "Gimp", "LibreOffice", "FileZilla", "OpenShot", "InnoSetup", "Git"};
