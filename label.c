@@ -31,13 +31,15 @@ void update_disponible(GtkWidget* label, int id)
     return;
 }
 
-void cleaner_fonction()
+void cleaner_fonction(gpointer data)
 {
     int compteur = 0;
 
+    app* application = data;
+
     for(compteur = 0; compteur < nombre_element; compteur++)
     {
-        gtk_label_set_text(GTK_LABEL(application.label_update_item[compteur]), "");
+        gtk_label_set_text(GTK_LABEL(application->label_update_item[compteur]), "");
     }
     return;
 }

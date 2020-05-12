@@ -51,7 +51,7 @@ int fonction_progression(void* ptr, double TotalToDownload, double NowDownloaded
     if(progression <= 1.0)
     {
         g_mutex_lock(&g_mutex[wd->id]);
-        gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(application.progress_bar_item[wd->id]), progression);
+        gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(wd->progress_bar), progression);
         g_mutex_unlock(&g_mutex[wd->id]);
     }
 
@@ -211,8 +211,8 @@ void* fonction_md5(gpointer data)
         g_free(error);
     }
 
-    gtk_widget_unset_state_flags(application.bouton_update, GTK_STATE_FLAG_INSENSITIVE);
-    gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(application.progress_bar_item[wd->id]), 0.0);
+    gtk_widget_unset_state_flags(wd->bouton_update, GTK_STATE_FLAG_INSENSITIVE);
+    gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(wd->progress_bar), 0.0);
 
     g_free(chemin_executable);
     g_free(server_sha);

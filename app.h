@@ -27,6 +27,9 @@
 typedef struct
 {
   int id;
+  GtkWidget* progress_bar;
+  GtkWidget* bouton_update;
+  GtkWidget* bouton_item_install;
 } WorkerData;
 
 typedef struct
@@ -57,8 +60,6 @@ typedef struct
 
     gdouble progression;
 }app;
-
-app application;
 
 static char tableau_id[nombre_element][TAILLE_MAX] = {"Novetat","Update","VLC","7zip", "Notepad++", "Gimp", "LibreOffice", "FileZilla", "OpenShot", "InnoSetup", "Git"};
 static char icon_id[nombre_element][TAILLE_MAX] = {"Image/novetat.png","Image/update.png","Image/vlc.png", "Image/zip.png", "Image/note.png", "Image/gimp.png", "Image/libreoffice.png", "Image/filezilla.png", "Image/openshot.png", "Image/innosetup.png", "Image/git.png"};

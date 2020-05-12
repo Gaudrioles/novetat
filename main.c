@@ -13,6 +13,7 @@ int main(int argc, char *argv[])
 
     /* Initialisation de la librairie GTK. */
     gtk_init(&argc, &argv);
+    app application;
 
     /* Window  */
     application.window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -135,11 +136,11 @@ int main(int argc, char *argv[])
     /* Signaux  */
     g_signal_connect(application.window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
     g_signal_connect(application.bouton_quitter, "clicked", G_CALLBACK(gtk_main_quit), NULL);
-    g_signal_connect(application.bouton_update, "clicked", G_CALLBACK(update_fonction), NULL);
+    g_signal_connect(application.bouton_update, "clicked", G_CALLBACK(update_fonction), &application);
 
     for(compteur = 0 ; compteur < nombre_element ; compteur++)
     {
-        g_signal_connect(application.bouton_item_install[compteur], "clicked", G_CALLBACK(install_fonction), NULL);
+        g_signal_connect(application.bouton_item_install[compteur], "clicked", G_CALLBACK(install_fonction), &application);
     }
 
     gtk_widget_show_all(application.window);

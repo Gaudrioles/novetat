@@ -114,11 +114,13 @@ int download_db_fonction()
     return 0;
 }
 
-void update_fonction()
+void update_fonction(GtkWidget* bouton, gpointer data)
 {
     int compteur = 0;
 
-    cleaner_fonction(application);
+    app* application =  data;
+
+    cleaner_fonction(data);
 
     if(fonction_initialisation() != TRUE)
     {
@@ -136,7 +138,7 @@ void update_fonction()
             if(tampon_version_client == NULL)
                 return;
 
-            mise_en_forme_label_version(application.label_version_item[compteur], tampon_version_client, compteur);
+            mise_en_forme_label_version(application->label_version_item[compteur], tampon_version_client, compteur);
             g_free(tampon_version_client);
         }
 
@@ -150,13 +152,13 @@ void update_fonction()
 
             if(strcmp(tampon_version_client, tampon_version_server) == 0)
             {
-                update_disponible(application.label_update_item[compteur], 0);
-                gtk_widget_set_state_flags(application.bouton_item_install[compteur], GTK_STATE_FLAG_INSENSITIVE, TRUE);
+                update_disponible(application->label_update_item[compteur], 0);
+                gtk_widget_set_state_flags(application->bouton_item_install[compteur], GTK_STATE_FLAG_INSENSITIVE, TRUE);
             }
             else
             {
-                update_disponible(application.label_update_item[compteur], 1);
-                gtk_widget_unset_state_flags(application.bouton_item_install[compteur], GTK_STATE_FLAG_INSENSITIVE);
+                update_disponible(application->label_update_item[compteur], 1);
+                gtk_widget_unset_state_flags(application->bouton_item_install[compteur], GTK_STATE_FLAG_INSENSITIVE);
             }
 
             g_free(tampon_version_client);
@@ -170,18 +172,19 @@ void update_fonction()
 
         for(compteur = 0 ; compteur < nombre_element ; compteur++)
         {
-            gtk_label_set_markup(GTK_LABEL(application.label_update_item[compteur]), tampon);
+            gtk_label_set_markup(GTK_LABEL(application->label_update_item[compteur]), tampon);
         }
 
         g_free(tampon);
     }
 }
 
-void install_fonction(GtkWidget* bouton)
+void install_fonction(GtkWidget* bouton, gpointer data)
 {
     int id = 0;
     const gchar* tampon = NULL;
     WorkerData* wd;
+    app * application = data;
 
     wd = g_malloc(sizeof *wd);
 
@@ -193,8 +196,11 @@ void install_fonction(GtkWidget* bouton)
         return;
 
     wd->id = id;
+    wd->progress_bar = application->progress_bar_item[id];
+    wd->bouton_update = application->bouton_update;
+    wd->bouton_item_install = application->bouton_item_install[id];
 
-    gtk_widget_set_state_flags(application.bouton_update, GTK_STATE_FLAG_INSENSITIVE, TRUE);
+    gtk_widget_set_state_flags(application->bouton_update, GTK_STATE_FLAG_INSENSITIVE, TRUE);
 
     start_thread_install(id, wd);
     start_thread_download(id, wd);
@@ -206,9 +212,11 @@ void start_thread_download(int id, gpointer data)
 {
     GThread* thread;
 
+    WorkerData* wd = data;
+
     remove(dl_id[id]);
 
-    gtk_widget_set_state_flags(application.bouton_item_install[id], GTK_STATE_FLAG_INSENSITIVE, TRUE);
+    gtk_widget_set_state_flags(wd->bouton_item_install, GTK_STATE_FLAG_INSENSITIVE, TRUE);
 
     thread = g_thread_new("Thread_d",download_progessbar, data);
 

@@ -2,8 +2,8 @@
 #define DL_H_INCLUDED
 #include <gtk/gtk.h>
 
-#define adresse_serveur "ftp://novetat:password@127.0.0.1:666"
-#define ip_serveur "ftp://127.0.0.1"
+#define adresse_serveur "ftp://novetat:PASSWORD@192.168.1.2:666"
+#define ip_serveur "ftp://192.168.1.2"
 
 #define update_exe "C:/ProgramData/novetat/update.exe"
 #define novetat_folder "C:/ProgramData/novetat/novetat.exe"
