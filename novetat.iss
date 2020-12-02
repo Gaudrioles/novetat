@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "novetat"
-#define MyAppVersion "1.0"
+#define MyAppVersion "1.2"
 #define MyAppPublisher "Bubi Gaudrioles"
 #define MyAppURL "https://github.com/Gaudrioles"
 #define MyAppExeName "novetat.exe"
@@ -10,7 +10,7 @@
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
-AppId={{5932EBAE-4CE4-4988-B71A-91459658AD84}
+AppId=Novetat_is1
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
 ;AppVerName={#MyAppName} {#MyAppVersion}
@@ -86,11 +86,14 @@ Source: "D:\CodeBlocksProjets\novetat\bin\Release\libpsl-5.dll"; DestDir: "{app}
 Source: "D:\CodeBlocksProjets\novetat\bin\Release\libsqlite3-0.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\CodeBlocksProjets\novetat\bin\Release\libssh2-1.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\CodeBlocksProjets\novetat\bin\Release\libssl-1_1-x64.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\CodeBlocksProjets\novetat\bin\Release\libssp-0.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\CodeBlocksProjets\novetat\bin\Release\libstdc++-6.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\CodeBlocksProjets\novetat\bin\Release\libthai-0.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\CodeBlocksProjets\novetat\bin\Release\libunistring-2.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\CodeBlocksProjets\novetat\bin\Release\libwinpthread-1.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\CodeBlocksProjets\novetat\bin\Release\libzstd.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "D:\CodeBlocksProjets\novetat\bin\Release\zlib1.dll"; DestDir: "{app}"; Flags: ignoreversion
+
 
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 

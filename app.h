@@ -17,11 +17,11 @@
     3 - zip
     4 - notepad++
     5 - gimp
-    6 - libreoffice
-    7 - FileZilla
-    8 - OpenShot
-    9 - InnoSetup
-    10 - Git
+	6 - libreoffice
+	7 - FileZilla
+	8 - OpenShot
+	9 - InnoSetup
+   10 - Git
 */
 
 typedef struct
@@ -30,6 +30,9 @@ typedef struct
   GtkWidget* progress_bar;
   GtkWidget* bouton_update;
   GtkWidget* bouton_item_install;
+  GtkWidget* label_update_item;
+  GtkWidget* label_version_item;
+  gdouble valeur;
 } WorkerData;
 
 typedef struct

@@ -199,11 +199,17 @@ void install_fonction(GtkWidget* bouton, gpointer data)
     wd->progress_bar = application->progress_bar_item[id];
     wd->bouton_update = application->bouton_update;
     wd->bouton_item_install = application->bouton_item_install[id];
+    wd->label_update_item = application->label_update_item[id];
+    wd->label_version_item = application->label_version_item[id];
+    wd->valeur = 0.0;
 
     gtk_widget_set_state_flags(application->bouton_update, GTK_STATE_FLAG_INSENSITIVE, TRUE);
 
+    g_timeout_add(50, pulse_fonction, wd);
     start_thread_install(id, wd);
     start_thread_download(id, wd);
+
+    gtk_widget_unset_state_flags(application->bouton_update, GTK_STATE_FLAG_INSENSITIVE);
 
     return;
 }

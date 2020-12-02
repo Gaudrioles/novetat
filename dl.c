@@ -12,9 +12,32 @@
 #include "gui_fonction.h"
 #include "sql.h"
 #include "win32.h"
+#include "label.h"
 
 static GCond g_condition[nombre_element];
 static GMutex g_mutex[nombre_element];
+static GMutex g_mutex_pbar[nombre_element];
+
+gboolean pulse_fonction(void* ptr)
+{
+    WorkerData* wd = ptr;
+
+    g_mutex_lock(&g_mutex_pbar[wd->id]);
+
+    if(wd->valeur > 0)
+    {
+        gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(wd->progress_bar), wd->valeur);
+    }
+
+    g_mutex_unlock(&g_mutex_pbar[wd->id]);
+
+    if(wd->valeur == 1)
+    {
+        return FALSE;
+    }
+
+    return TRUE;
+}
 
 struct FtpFile
 {
@@ -46,15 +69,10 @@ static size_t my_fwrite(void *buffer, size_t size, size_t nmemb, void *stream)
 int fonction_progression(void* ptr, double TotalToDownload, double NowDownloaded, double TotalToUpload, double NowUploaded)
 {
     WorkerData* wd = ptr;
-    gdouble progression =  NowDownloaded / TotalToDownload;
 
-    if(progression <= 1.0)
-    {
-        g_mutex_lock(&g_mutex[wd->id]);
-        gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(wd->progress_bar), progression);
-        g_mutex_unlock(&g_mutex[wd->id]);
-    }
-
+    g_mutex_lock(&g_mutex_pbar[wd->id]);
+    wd->valeur =  NowDownloaded / TotalToDownload;
+    g_mutex_unlock(&g_mutex_pbar[wd->id]);
 
     return 0;
 }
@@ -200,7 +218,10 @@ void* fonction_md5(gpointer data)
             g_free(tampon);
             tampon = lecture_db_server_version(wd->id);
             update_db_client_version(wd->id, tampon);
+            mise_en_forme_label_version(wd->label_version_item, tampon, wd->id);
             g_free(tampon);
+            update_disponible(wd->label_update_item , 0);
+            gtk_widget_set_state_flags(wd->bouton_item_install, GTK_STATE_FLAG_INSENSITIVE, TRUE);
         }
     }
     else
@@ -209,9 +230,9 @@ void* fonction_md5(gpointer data)
         error = g_strdup_printf("Novetat : %s gui_fonction.c::fonction_md5 %s -> erreur sha256sum",APP_VERSION, tableau_id[wd->id]);
         creation_fichier_log(error);
         g_free(error);
+        gtk_widget_unset_state_flags(wd->bouton_update, GTK_STATE_FLAG_INSENSITIVE);
     }
 
-    gtk_widget_unset_state_flags(wd->bouton_update, GTK_STATE_FLAG_INSENSITIVE);
     gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(wd->progress_bar), 0.0);
 
     g_free(chemin_executable);
@@ -240,7 +261,7 @@ void* fonction_md5_novetat(gpointer data)
     server_version = lecture_db_server_version(wd->id);
     server_registre = lecture_chemin_registre(wd->id, db_server);
 
-    if(server_sha == NULL || sha == NULL || server_version || server_registre)
+    if(server_sha == NULL || sha == NULL || server_version == NULL || server_registre == NULL)
     {
         g_free(wd);
         return NULL;
@@ -252,17 +273,27 @@ void* fonction_md5_novetat(gpointer data)
         server_registre = lecture_chemin_registre(wd->id,db_server);
         update_db_client_registre(wd->id, server_registre);
 
-        free(sha);
-        g_free(server_sha);
-        g_free(server_version);
-        g_free(server_registre);
-
         remove(novetat_folder);
+
         rename(dl_id[wd->id], novetat_folder);
 
         Sleep(10);
 
+        if(fichier_existe(novetat_folder) != TRUE)
+        {
+            return NULL;
+        }
+
         system(update_exe);
+        free(sha);
+        g_free(server_sha);
+        g_free(server_version);
+        g_free(server_registre);
+        g_free(wd);
+
+        gtk_main_quit();
+
+        return NULL;
     }
     else
     {
@@ -272,13 +303,14 @@ void* fonction_md5_novetat(gpointer data)
         creation_fichier_log(error);
 
         g_free(error);
-    }
+        free(sha);
+        g_free(server_sha);
+        g_free(server_version);
+        g_free(server_registre);
+        g_free(wd);
 
-    free(sha);
-    g_free(server_sha);
-    g_free(server_version);
-    g_free(server_registre);
-    g_free(wd);
+        return NULL;
+    }
 
     return NULL;
 }

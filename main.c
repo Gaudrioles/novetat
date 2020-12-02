@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
 
     for(compteur = 0 ; compteur < nombre_element ; compteur++)
     {
-        application.progress_bar_item[compteur]   = gtk_progress_bar_new();
+        application.progress_bar_item[compteur] = gtk_progress_bar_new();
     }
 
     /* Label markup */
@@ -107,7 +107,7 @@ int main(int argc, char *argv[])
     gtk_container_add(GTK_CONTAINER(application.window), application.box_principale);
     gtk_container_add(GTK_CONTAINER(application.scrolled_window), application.box_items);
 
-    gtk_box_pack_start(GTK_BOX(application.box_principale), application.scrolled_window, TRUE, TRUE, 5);
+    gtk_box_pack_start(GTK_BOX(application.box_principale), application.scrolled_window, TRUE, TRUE, 0);
     gtk_box_pack_end(GTK_BOX(application.box_principale), application.box_bouton_quitter, FALSE, FALSE, 5);
 
     for(compteur = 0 ; compteur < nombre_element ; compteur++)
